@@ -19,6 +19,7 @@ import config from "../../../customize"
 import configStyles from "../../../customize-styles"
 
 const Header = ({ siteTitle, showTitle, isPostTemplate }) => {
+
   return (
     <StyledMainHeader className="main-header">
       {/* Google AdSense */}
@@ -114,7 +115,7 @@ const StyledMainHeaderInner = styled.div`
   align-items: center;
   height: 55px;
   margin: 0 auto;
-  max-width: ${props => props.theme.maxWidthSite};
+  max-width: ${props => props.theme.maxWidthSiteHeader};
   padding: 0.6rem;
   h1 {
     font-weight: 400;

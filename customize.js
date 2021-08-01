@@ -4,18 +4,19 @@
 const config = {
   /* Site
   ========================================= */
-  title: `gatsby-blog-mdx`,          // Displayed in header
+  title: `Narawit.dev`,          // Displayed in header
   description: `This is my blog`,     // Site description
-  maxWidth: "768px",                  // Max width of website
+  maxWidth: "1452px",                  // Max width of website
+  maxWidthPostTemplate: "768px", // Max width of post template
   enableAbout: true,                  // Enables about page
   siteUrl: `https://yourDomain.com/`, // For sitemap & RSS feed
   useScrollIndicator: true,           // Use scroll indicator on top of screen in posts
 
   /* Profile
   ========================================= */
-  author: `Author Name`,                             // Name shows on profile
-  profileDescription: "{Edit me in customize.js}",   // Shows under author name
-  profileImageName: `profile.jpeg`,                  // Place profile.jpg/.jpeg/.png in _assets folder
+  author: `Make Today Better.`,                             // Name shows on profile
+  profileDescription: "#narawit",   // Shows under author name
+  profileImageName: `hacker.jpeg`,                  // Place profile.jpg/.jpeg/.png in _assets folder
   location: "",                                      // Location under profileDescription. "" --> disabled
   footerLink: "",                                    // Link to page when you click footer name
 

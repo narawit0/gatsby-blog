@@ -15,34 +15,8 @@ const IndexPage = ({ data }) => {
     setLoaded(parseInt(curLoad))
   }, [])
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll)
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  })
-
-  const handleScroll = () => {
-    const lastPostLoaded = document.querySelector(
-      "div.posts-list > a:last-child"
-    )
-    const lastPostLoadedOffset =
-      lastPostLoaded.offsetTop + lastPostLoaded.clientHeight
-    const pageOffset = window.pageYOffset + window.innerHeight
-
-    if (pageOffset > lastPostLoadedOffset) {
-      // Stops loading
-      if (posts.length > loaded)
-        setLoaded(prev => {
-          sessionStorage.setItem("curLoad", prev + loadsPer)
-          return prev + loadsPer
-        })
-    }
-  }
-
   return (
-    <Layout>
+    <Layout showTitle={true}>
       <SEO title="Home" />
       <MainCard posts={posts} loads={loaded} />
     </Layout>
@@ -70,6 +44,13 @@ export const pageQuery = graphql`
             tags
             excerpt
             draft
+            cover {
+              childImageSharp {
+                fluid {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
           }
         }
       }

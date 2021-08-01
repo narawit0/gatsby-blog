@@ -35,7 +35,9 @@ const Layout = ({ children, showTitle, isPostTemplate }) => {
         showTitle={showTitle}
         isPostTemplate={isPostTemplate}
       />
-      <StyledMain>{children}</StyledMain>
+      <StyledMain isPostTemplate={isPostTemplate}>
+        {children}
+      </StyledMain>
       <Footer />
       <ScrollTopButton scrollStepInPx="150" delayInMs="5" />
     </>
@@ -65,5 +67,5 @@ export default Layout
 const StyledMain = styled.main`
   position: relative;
   margin: 0 auto;
-  max-width: ${theme.maxWidthSite};
+  max-width: ${props => props.isPostTemplate ? theme.maxWidthPostTemplate : theme.maxWidthSite};
 `

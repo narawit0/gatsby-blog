@@ -6,12 +6,14 @@ import { theme } from "../../Shared/styles-global"
 import config from "../../../../customize"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faClock } from "@fortawesome/free-solid-svg-icons"
+import Img from "gatsby-image"
 
-const PostCard = ({ id, title, date, path, excerpt, timeToRead }) => {
+const PostCard = ({ id, title, date, path, excerpt, timeToRead, cover }) => {
   return (
     <>
-      <Link to={path}>
+      <StyledLink to={path}>
         <StyledPostCard key={id}>
+          {cover ? <Img fluid={cover.childImageSharp.fluid}/> : null}
           <h3>{title}</h3>
           {config.showTimeToRead && (
             <span>
@@ -25,7 +27,7 @@ const PostCard = ({ id, title, date, path, excerpt, timeToRead }) => {
           )}
           <p>{excerpt}</p>
         </StyledPostCard>
-      </Link>
+      </StyledLink>
     </>
   )
 }
@@ -36,6 +38,7 @@ const StyledPostCard = styled.div`
   cursor: pointer;
   padding: 1.5rem 1rem;
   transition: none;
+  width: 100%;
 
   h3 {
     font-weight: 500;
@@ -70,4 +73,8 @@ const StyledPostCard = styled.div`
       background: transparent;
     }
   }
+`
+
+const StyledLink = styled(props => <Link {...props} />)`
+  width: 100%;
 `

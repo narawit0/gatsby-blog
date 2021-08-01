@@ -25,6 +25,8 @@ const globalVar = {
   midGreyColor: "#ccc",
   mintColor: "#bfe2ca",
   maxWidthSite: config.maxWidth,
+  maxWidthPostTemplate: config.maxWidthPostTemplate,
+  maxWidthSiteHeader: config.maxWidthPostTemplate,
 
   // @mixin disable-selection()
   disableSelection: `-webkit-touch-callout: none;

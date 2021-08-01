@@ -172,18 +172,6 @@ StyledTagsPosts = styled.div`
     }
   }
 `
-if (!isMobile) {
-  StyledTagsPosts = styled.div`
-    position: relative;
-    display: grid;
-    grid-template-columns: 0.25fr auto;
-    padding: 0.5rem 1.5rem 1.5rem 1.5rem;
-
-    @media (max-width: 500px) {
-      padding: 0rem 1rem 1rem 1rem;
-    }
-  `
-}
 
 const StyledMainCard = styled.div`
   position: relative;

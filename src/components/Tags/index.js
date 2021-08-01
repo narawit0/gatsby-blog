@@ -1,9 +1,7 @@
 import React from "react"
 import Tag from "./Tag"
 import { isMobile } from "react-device-detect"
-import styled, { keyframes } from "styled-components"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faHandPointer } from "@fortawesome/free-solid-svg-icons"
+import styled from "styled-components"
 import { TAG } from "../../constants"
 
 class Tags extends React.Component {
@@ -88,9 +86,6 @@ class Tags extends React.Component {
     const { tags, selectTag, selectedTag } = this.props
     const childrenElement = (
       <div className="tag-list" onScroll={this.handleScrollX}>
-        {isMobile && this.state.showSwipeIcon && (
-          <StyledFA className="icon-hand-ptr" icon={faHandPointer} />
-        )}
         {/* Used to apply overflow to work with sticky */}
         <div className="tag-list-inner">
           <Tag
@@ -112,45 +107,15 @@ class Tags extends React.Component {
       </div>
     )
 
-    return !isMobile ? (
-      <StyledTagsVertical className="tags-vertical">
-        {childrenElement}
-      </StyledTagsVertical>
-    ) : (
+    return<>
       <StyledTagsHorizontal className="tags-horizontal" ref={this.tagRef}>
         {childrenElement}
       </StyledTagsHorizontal>
-    )
+    </>
   }
 }
 
 export default Tags
-
-const StyledTagsVertical = styled.div`
-  margin-top: 0.5rem;
-  background: none !important;
-  .tag-list {
-    position: sticky;
-    top: 50px;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding: 0.5rem;
-    &-inner {
-      width: 120px;
-      overflow-x: auto;
-    }
-  }
-  @media (max-width: 500px) {
-    .tag-list {
-      &-inner {
-        width: 80px;
-        font-size: 0.75rem;
-      }
-    }
-  }
-`
 
 const StyledTagsHorizontal = styled.div`
   position: static;
@@ -178,29 +143,4 @@ const StyledTagsHorizontal = styled.div`
       }
     }
   }
-`
-const swipeLeft = keyframes`
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 1;
-    right: 35%;
-    transform: translateX(-35%);
-    bottom: 5px;
-  }
-  100% {
-    opacity: 0;
-    right: 35%;
-    transform: translateX(-35%);
-    bottom: 5px;
-  }
-`
-
-const StyledFA = styled(FontAwesomeIcon)`
-  position: absolute;
-  bottom: 6px;
-  right: 20%;
-  transform: translateX(-20%);
-  animation: ${swipeLeft} 2000ms forwards 1500ms ease-in;
 `

@@ -137,4 +137,4 @@ A ready-to-use, customizable personal blog with minimalistic design
 
 ## License
 
-[MIT](https://github.com/EllisMin/gatsby-blog-mdx/blob/master/LICENSE)
+[MIT](https://github.com/EllisMin/gatsby-blog-mdx/blob/master/LICENSE)# gatsby-blog

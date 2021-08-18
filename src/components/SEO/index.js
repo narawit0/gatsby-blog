@@ -30,6 +30,10 @@ function SEO({ description, lang, meta, title }) {
         titleTemplate={`%s | ${site.siteMetadata.title}`}
         meta={[
           {
+            name: `coinzilla`,
+            content: `b6352c808236687c8c65ab394b9009c4`
+          },
+          {
             name: `description`,
             content: metaDescription,
           },

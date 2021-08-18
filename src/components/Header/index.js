@@ -17,11 +17,16 @@ import ProgressBar from "./ProgressBar"
 
 import config from "../../../customize"
 import configStyles from "../../../customize-styles"
+import { Helmet } from "react-helmet"
 
 const Header = ({ siteTitle, showTitle, isPostTemplate }) => {
 
   return (
     <StyledMainHeader className="main-header">
+      <Helmet>
+        <meta name="coinzilla" content="b6352c808236687c8c65ab394b9009c4" />
+      </Helmet>
+
       {/* Google AdSense */}
       {config.googleAdSenseId && config.googleAdSenseId !== "" && (
         <script

@@ -1,0 +1,74 @@
+---
+title: วิธีการ Setup Nginx ด้วย Docker's Nginx Image
+date: 2021-09-04
+tags: [Docker]
+excerpt: ขอเกริ่นคร่าวๆก่อนว่า โดยปกติแล้วถ้าเราจะ นำโปรเจ็กต์ของเรา ขึ้นไปอยู่บนเว็บสักเว็บนึง สิ่งที่เราจะต้องทำคือ...
+cover: ../images/docker-nginx.png
+---
+![](../images/docker-nginx.png)
+ขอเกริ่นคร่าวๆก่อนว่า โดยปกติแล้วถ้าเราจะ นำโปรเจ็กต์ของเรา ขึ้นไปอยู่บนเว็บสักเว็บนึง สิ่งที่เราจะต้องทำคือ ติดตั้ง Web Server ลงบน Server
+ของเราก่อน อาจจะเป็น Apache หรือ Nginx ก็ได้ แต่ในบทความนี้เราจะใช้ Nginx นะครับ ซึ่งการติดตั้ง Nginx บน Server
+จริงๆแล้วก็ไม่ได้มีความยุ่งยากซับซ้อนอะไรมากขนาดนั้น แต่วันนี้เราจะมาใช้ Image ของ Nginx ที่อยู่บน Docker เพื่อทำให้ชีวิตง่ายขึ้นไปอีกขั้นนึง
+
+### ขั้นตอนในการ Setup
+
+1. คือเราต้องทำการติดตั้ง Docker ในเครื่องของเราก่อน ขั้นตอนการติดตั้งก็ หาอ่านได้ในเว็บไซต์ของ Docker ครับ
+2. ให้ทำการ สร้างไฟล์ docker-compose.yml ขึ้นมา หรือจะ Start Container เองก็ได้ครับ ได้ทั้งคู่
+```
+// ตัวอย่างไฟล์ docker-compose.yml
+services:
+  nginx:
+    container_name: 'nginx'
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./data/certs:/etc/nginx/certs
+      - /var/www/html:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - docker-network
+networks:
+  docker-network:
+    driver: bridge
+```
+อธิบายคร่าวๆ คือ docker-compose เหมือนเป็นไฟล์สำหรับ configurations ต่างๆของ docker
+
+**Image**
+
+`image: nginx:latest` ใช้ nginx เวอร์ชั่นล่าสุด เมื่อทำการ build docker
+
+**Ports**
+
+`"80:80" "443:443"` ทำการ map port 80 และ 443 ให้ requests ที่เข้ามาจากข้างนอกนั้นส่งเข้าไปใน Docker container ได้
+
+**Volumes**
+
+Volume คือการ เชื่อมข้อมูลระหว่าง ต้นทาง (เครื่องของเรา) : ปลายทาง (Container)
+
+`./data/certs:/etc/nginx/certs` เชื่อม certificate file เข้าไปใน container เพื่อรองรับการเชื่อมต่อผ่าน HTTPS
+
+`/var/www/html:/usr/share/nginx/html` เชื่อม project ของเราที่จะนำขึ้นไปอยู่บนเว็บไซต์ให้ nginx สามารถมาอ่านข้อมูลได้
+
+`./nginx.conf:/etc/nginx/conf.d/default.conf` เชื่อม nginx config fle สำหรับการ Setup เว็บของเราด้วย nginx
+```
+// ตัวอย่างไฟล์ nginx
+server {
+    listen 443 ssl;
+    server_name {{your-domain}};
+
+    root /usr/share/nginx/html/{{your-project-path}};
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    ssl_certificate /etc/nginx/certs/{{your-domain}}.cert;
+    ssl_certificate_key /etc/nginx/certs/{{your-domain}}.key;
+}
+```
+
+3. Run command `docker compose up -d` เพื่ออ่านไฟล์ docker-compose.yml แล้วทำการ build เป็น container
+4. เท่านี้ก็เป็นการเสร็จสิ้นแล้ว สำหรับการ Deploy Project ด้วย Nginx Docker Image

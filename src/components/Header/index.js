@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons"
 import HeaderIcon from "../HeaderIcon"
 import ProgressBar from "./ProgressBar"
+import ToggleMode from "../Layout/ToggleMode"
 
 import config from "../../../customize"
 import configStyles from "../../../customize-styles"
@@ -37,56 +38,9 @@ const Header = ({ siteTitle, showTitle, isPostTemplate }) => {
         <h1 style={{ fontSize: "1.5rem" }}>
           {showTitle && <Link to="/">{`${siteTitle}`}</Link>}
         </h1>
-        <StyledMediaIcons>
-          <HeaderIcon
-            accountInfo={config.socialMediaLinks.email}
-            mediaName={"email"}
-            preHref={"mailto:"}
-            icon={faEnvelope}
-          />
-
-          <HeaderIcon
-            accountInfo={config.socialMediaLinks.github}
-            mediaName={"github"}
-            preHref={"https://github.com/"}
-            icon={faGithub}
-          />
-
-          <HeaderIcon
-            accountInfo={config.socialMediaLinks.facebook}
-            mediaName={"facebook"}
-            preHref={"https://facebook.com/"}
-            icon={faFacebook}
-          />
-
-          <HeaderIcon
-            accountInfo={config.socialMediaLinks.instagram}
-            mediaName={"instagram"}
-            preHref={"https://instagram.com/"}
-            icon={faInstagram}
-          />
-
-          <HeaderIcon
-            accountInfo={config.socialMediaLinks.twitter}
-            mediaName={"twitter"}
-            preHref={"https://twitter.com/"}
-            icon={faTwitter}
-          />
-
-          <HeaderIcon
-            accountInfo={config.socialMediaLinks.linkedIn}
-            mediaName={"linkedin"}
-            preHref={"https://linkedin.com/"}
-            icon={faLinkedin}
-          />
-
-          <HeaderIcon
-            accountInfo={config.socialMediaLinks.medium}
-            mediaName={"medium"}
-            preHref={"https://medium.com/@"}
-            icon={faMedium}
-          />
-        </StyledMediaIcons>
+        <StyledSwitchContainer className="switch-container">
+          <ToggleMode />
+        </StyledSwitchContainer>
       </StyledMainHeaderInner>
     </StyledMainHeader>
   )
@@ -134,4 +88,18 @@ const StyledMediaIcons = styled.div`
       margin: 0 0.15rem;
     }
   }
+`
+
+const StyledSwitchContainer = styled.div`
+  //position: relative;
+  //text-align: end;
+  //top: 0px;
+  //margin: 0 0.4rem;
+  //top: 12px;
+  //right: 25px;
+  //z-index: 2;
+
+  //@media (max-width: 500px) {
+  //  right: 10px;
+  //}
 `

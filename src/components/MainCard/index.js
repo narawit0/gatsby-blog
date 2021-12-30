@@ -4,7 +4,6 @@ import Profile from "../Profile"
 import Tags from "../Tags"
 import PostList from "../Posts/PostList"
 import Loader from "../Loader"
-import ToggleMode from "../Layout/ToggleMode"
 import { isMobile } from "react-device-detect"
 import { TAG } from "../../constants"
 
@@ -108,12 +107,8 @@ class MainCard extends Component {
   render() {
     return (
       <StyledMainCard className="main-card">
-        <StyledSwitchContainer className="switch-container">
-          <ToggleMode />
-        </StyledSwitchContainer>
         <StyledSubMain className="sub-main">
           <StyledSubMainInner>
-            <Profile home />
             {this.state.filteredPosts.length > 0 ? (
               <StyledTagsPosts>
                 <Tags
@@ -200,16 +195,3 @@ if (!isMobile) {
     transform: translateY(-25px);
   `
 }
-
-const StyledSwitchContainer = styled.div`
-  position: absolute;
-  text-align: end;
-  margin: 0 0.4rem;
-  top: 12px;
-  right: 25px;
-  z-index: 2;
-
-  @media (max-width: 500px) {
-    right: 10px;
-  }
-`

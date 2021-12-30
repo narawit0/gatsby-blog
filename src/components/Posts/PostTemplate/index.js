@@ -218,12 +218,6 @@ class PostTemplate extends React.Component {
     return (
       <Layout showTitle={true} isPostTemplate>
         <SEO title={post.frontmatter.title} description={post.excerpt} />
-        <div
-          className="switch-container"
-          style={{ textAlign: "end", margin: "0 1.1rem" }}
-        >
-          <ToggleMode />
-        </div>
         <StyledHTML className="post-html">
           {!isAboutPage && (
             <>

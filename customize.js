@@ -5,7 +5,7 @@ const config = {
   /* Site
   ========================================= */
   title: `Narawit.dev`,          // Displayed in header
-  description: `This is my blog`,     // Site description
+  description: `Write article about programming languages or whatever i'm into on that moment.`,     // Site description
   maxWidth: "1452px",                  // Max width of website
   maxWidthPostTemplate: "768px", // Max width of post template
   enableAbout: true,                  // Enables about page

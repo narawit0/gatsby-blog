@@ -117,7 +117,7 @@ class MainCard extends Component {
                   tags={this.state.tags}
                 />
                 <PostList
-                  posts={this.state.filteredPosts.slice(0, this.props.loads)}
+                  posts={this.state.filteredPosts.slice(0, this.props.loads + 1)}
                 />
               </StyledTagsPosts>
             ) : (

@@ -42,6 +42,7 @@ const StyledPostCard = styled.div`
 
   h3 {
     font-weight: 500;
+    margin-top: 0.5rem;
   }
 
   &:hover {

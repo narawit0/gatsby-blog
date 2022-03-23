@@ -9,7 +9,7 @@ const config = {
   maxWidth: "1452px",                  // Max width of website
   maxWidthPostTemplate: "768px", // Max width of post template
   enableAbout: true,                  // Enables about page
-  siteUrl: `https://yourDomain.com/`, // For sitemap & RSS feed
+  siteUrl: `https://narawit.dev/`, // For sitemap & RSS feed
   useScrollIndicator: true,           // Use scroll indicator on top of screen in posts
 
   /* Profile

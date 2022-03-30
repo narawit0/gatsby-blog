@@ -53,7 +53,7 @@ const config = {
   breakCodeLines: false,                      // Breaks long code lines instead of having horizontal scroll
   faviconSrc: `_assets/icon-code.png`,        // Favicon
   gaTrackingId: `UA-204707221-1`,                           // Your google analytics tracking id--i.e. UA-*****
-  googleAdSenseId: `ca-pub-8918680027919926`,                        // Your google AdSense client id--i.e. ca-pub-****
+  googleAdSenseId: `ca-pub-3745286694854005`,                        // Your google AdSense client id--i.e. ca-pub-****
 }
 
 module.exports = config

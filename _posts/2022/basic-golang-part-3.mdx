@@ -1,0 +1,366 @@
+---
+title: Basic Golang  Part 3
+date: 2022-04-03
+tags: [Go]
+excerpt: ในส่วนของบทที่ 3 ว่าด้วยเรื่องของ Interfaces, Methods, Goroutines มาดูกันว่าใช้งานยังไง
+cover: ../images/golang-basic-part-2.png
+---
+![](../images/basic-golang-final.png)
+> [Basic Golang Part 1](https://narawit.dev/2022/basic-golang-part-1/) - Basic Syntax
+
+> [Basic Golang Part 2](https://narawit.dev/2022/basic-golang-part-2/) - Pointers, Structs, Slices, Maps, Functions
+
+> [Basic Golang Part 3](https://narawit.dev/2022/basic-golang-part-3/) - Interfaces, Methods, Goroutines
+
+<br/>
+สำหรับในบทความนี้ จะมาพูดถึงส่วนที่เหลือของความรู้พื้นฐานที่จะนำไปใช้ในการเขียนภาษา Go ประกอบไปด้วย Interfaces, Methods, Goroutines และส่วนหลักๆที่น่าจะสำคัญที่สุดและเป็น concept หลักๆในภาษา Go ที่ไม่มีใครเหมือนคือ Goroutines
+
+## Methods
+> A method is a function with a special receiver argument.
+
+ด้วยความที่ Golang ไม่มีคลาสเหมือนในภาษาที่เป็น OOP ทั่วๆไป การที่เราจะประกาศ methods ในภาษา Go นั้นจึงจำเป็นที่จะต้องประกาศผูกกับ ประเภทของตัวแปร (types)
+
+```go
+package main
+
+import "fmt"
+
+type Rectangle struct {
+    width float64
+    height float64
+}
+
+func main() {
+    a := Rectangle{
+        width: 30,
+        height: 40,
+    }
+
+    fmt.Println(a.Area()) // 1200
+}
+
+func (r Rectangle) Area() float64 {
+    return r.width * r.height
+}
+```
+จากโค้ดข้างต้นจะเห็นว่า Method Area นั้น มี `receiver` เป็น Type `Rectangle` ทำให้สามารถเรียกใช้ Method ผ่านตัวแปร `a` ได้เลย
+
+<br/>
+
+## Interfaces
+> An interface type is defined as a set of method signatures.
+
+Interfaces ถูกใช้เพื่อเป็นไกด์ไลน์ สำหรับ Classes หรือ Types ในภาษา Go เพื่อที่จะบอกว่าในแต่ละ Types ที่ Implement Interface นั้นๆ จะต้องมี Methods อะไรบ้าง
+การ Implement Interface ในภาษา Go เป็นการ Implement ที่ไม่ได้มีการเขียนประกาศเป็น Keyword ที่ชัดเจนเหมือนในภาษาอื่นๆ หรือในภาษาอังกฤษเรียกว่า `implicitly implmented` (โดยปริยาย)
+
+```go
+package main
+
+import "fmt"
+
+type Triangle struct {
+	base   float64
+	height float64
+}
+
+type Rectangle struct {
+	width  float64
+	height float64
+}
+
+type Areaer interface {
+	Area() float64
+}
+
+func main() {
+	t := Triangle{
+		base:   20,
+		height: 40,
+	}
+
+	r := Rectangle{
+		width:  40,
+		height: 30,
+	}
+
+	PrintArea(t) // Area of main.Triangle is 400.000000
+
+	PrintArea(r) // Area of main.Rectangle is 1200.000000
+
+}
+
+func (t Triangle) Area() float64 {
+	return 0.5 * (t.base * t.height)
+}
+
+func (r Rectangle) Area() float64 {
+	return r.width * r.height
+}
+
+func PrintArea(a Areaer) {
+	fmt.Printf("Area of %T is %f \n", a, a.Area())
+}
+```
+
+อธิบายโค้ดข้างต้น จะเห็นว่าเราได้ทำการสร้าง `Struct` ขึ้นมาสองตัว `Triangle`, `Rectangle` และประกาศ Interface ขึ้นมาหนึ่งตัว `Areaer` มี method signature เป็น `Area()`
+จากนั้นประกาศ ฟังก์ชั่น `PrintArea` โดยรับ `Argument` เป็น `Areaer Interface` จะเห็นได้ว่าในฟังก์ชั่น `PrintArea` เราไม่จำเป็นต้องกังวลเลยว่า parameter ที่เข้ามานั้น มี Area Method หรือไม่
+เพราะถ้าตัวแปรที่ส่งเข้ามานั้นไม่ได้ Implement Area method ก็จะ Error
+
+## Goroutines
+> A goroutine is a lightweight thread managed by the Go runtime.
+
+โดยปกติแล้วเวลาเราใช้คำสั่ง `go run main.go` มันจะทำงานแบบต่อเนื่อง (Synchronously) หากเราอยากให้โค้ดของเราทำงานแบบไม่ต่อเนื่อง (Asynchronously)
+ในภาษา Go จะต้องใช้คำสั่ง
+
+```
+go f(x, y, z)
+```
+
+อธิบายคือ สร้าง Goroutine ขึ้นมาอีกตัวเพื่อรันฟังก์ชั่นที่ถูกเรียกใช้ใดๆ โดยที่จะไม่มีการบล็อคการทำงานของ Main Goroutine
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func sayHello(s string) {
+	for i := 0; i < 5; i++ {
+		time.Sleep(100 * time.Millisecond)
+		fmt.Println(s)
+	}
+}
+func main() {
+	go sayHello("GOROUTINE 1")
+	go sayHello("GOROUTINE 2")
+
+	time.Sleep(time.Second)
+	fmt.Println("END OF GOROUTINES")
+}
+
+```
+```
+OUTPUT
+
+GOROUTINE 1
+GOROUTINE 2
+GOROUTINE 2
+GOROUTINE 1
+GOROUTINE 2
+GOROUTINE 1
+GOROUTINE 1
+GOROUTINE 2
+GOROUTINE 2
+GOROUTINE 1
+END OF GOROUTINES
+```
+จากโค้ดข้างต้น เราได้ทำการสร้าง `Goroutine` ขึ้นมาใหม่อีก 2 ตัว จะเห็นได้ว่า output ที่เรา print ออกมานั้น จะไม่ได้มีการ print ข้อความตามลำดับในการเรียกใช้ function แต่จะเป็นแบบสุ่ม
+แสดงให้เห็นว่าเมื่อเราใช้คำสั่ง `go` นำหน้า function จะทำให้ function นั้นถูกนำไป `execute` อีก `thread` นึงทำให้การทำงานของโค้ดเราเป็นแบบ `Asynchronous` นั่นเอง
+
+<br/>
+
+## Channels
+> Channels are a typed conduit through which you can send and receive values with the channel operator, <-.
+
+Channel คือช่องทางในการรับส่งค่าอะไรบางอย่าง โดยใช้ operator `<-` Channel สามารถจะประกาศใช้ได้สองวิธี `Buffered` และ `Unbuffered`
+
+```
+ch := make(chan int) // สร้าง channel แบบ unbuffered
+ch := make(chan int, 100) // สร้าง channel แบบ buffered
+```
+
+วิธีการใช้งานเบื้องต้น
+
+```
+ch <- v // ส่งค่าของตัวแปร v เข้าไปใน channel ch
+v := <-ch // assign ค่าตัวแปร v ด้วยค่าจาก channel ch
+```
+
+<br/>
+
+### Unbuffered
+Channel ที่เมื่อทำการรับค่าเข้ามาแล้วต้องส่งต่อออกไปทันที หากถือค่าไว้มากกว่าหนึ่งค่าในช่วงเวลาเดียวกัน จะทำให้เกิด Deadlock
+
+<br/>
+
+![](../images/contents/unbuffered.png)
+
+<br/>
+
+ตัวอย่าง
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+
+func main() {
+	c := make(chan int)
+	v := 0
+
+	go func() {
+		sum := 0
+
+		for i := 0; i < 10; i++ {
+			sum += i
+		}
+
+		c <- sum
+	}()
+
+	v = <-c
+
+	fmt.Println(v)
+}
+```
+อธิบายคือ เมื่อ loop ครบจำนวนสิบครั้งแล้ว ส่งค่าตัวแปร sum เข้าไปใน channel c จากนั้น ดึงค่าจาก channel c เข้ามาที่ตัวแปร v และแสดงผล ในกรณีนี้ channel c เก็บค่าหนึ่งค่า ทำให้ไม่เกิด Deadlock
+
+<br/>
+
+### Buffered
+จะใช้ในกรณีที่เราต้องการเก็บค่าใน Channel มากกว่าหนึ่งค่าในช่วงเวลาเดียวกัน
+
+<br/>
+
+![](../images/contents/buffered.png)
+
+<br/>
+ตัวอย่าง
+
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	ch := make(chan int, 2)
+	ch <- 1
+	ch <- 2
+	fmt.Println(<-ch)
+	fmt.Println(<-ch)
+	fmt.Println(<-ch)
+}
+```
+
+```
+OUTPUT
+
+1
+2
+fatal error: all goroutines are asleep - deadlock!
+
+goroutine 1 [chan receive]:
+main.main()
+	/tmp/sandbox2520985862/prog.go:11 +0x125
+```
+
+อธิบายคือ จะเห็นว่าเมื่อต้องการแสดงค่าจาก Channel ที่มี buffer ไม่เพียงพอก็จะทำให้เกิด Error ขึ้น
+
+<br/>
+
+### Range and Close
+เมื่อเราสร้าง Channel ขึ้นมาหนึ่งตัวแล้ว อยากแสดงผลโดยการ loop ค่าใน Channel นั้นๆ ออกมาเราสามารถใช้คำสั่ง range ได้
+แต่มีข้อแม้คือ ต้องทำการสั่ง close channel ทุกครั้งเมื่อจบการทำงานหรือไม่มีค่าที่จะส่งเข้าไปใน Channel นั้นๆ แล้ว ถ้าไม่ Close จะทำให้เกิด Error
+
+```
+for i := range c // จะทำการรับค่าจาก channel c จนกว่าจะมีการสั่ง close channel
+```
+
+หรือใช้ค่าที่ return มาจาก channel เพื่อเช็คว่า channel นี้มีค่าที่กำลังจะส่งเข้ามาอีกหรือไม่
+
+```
+v, ok := <-ch
+```
+
+ถ้า oK เป็น false แสดงว่า ไม่มีค่าที่จะส่งเข้ามาแล้ว และ channel ได้ทำการปิดเรียบร้อยแล้ว
+
+<br/>
+
+ตัวอย่าง
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func fibonacci(n int, c chan int) {
+	x, y := 0, 1
+	for i := 0; i < n; i++ {
+		c <- x
+		x, y = y, x+y
+	}
+	close(c)
+}
+
+func main() {
+	c := make(chan int, 10)
+	go fibonacci(cap(c), c)
+	for i := range c {
+		fmt.Println(i)
+	}
+}
+
+```
+
+<br/>
+
+### Select
+ในกรณีที่เรามีหลายๆ Channel แล้วเราต้องการรอการแสดงผลจาก Channel เหล่านั้น เราสามารถใช้คำสั่ง Select ได้ เมื่อมีคำสั่งในการ ดึงค่า หรือ เก็บค่า ใน Channel ก็จะเข้าเงื่อนไขที่เราได้ทำการดักเอาไว้
+
+```
+select {
+    case c <- x:
+        fmt.Println(c)
+    case ch <- y:
+        fmt.Println(ch)
+    }
+```
+
+ตัวอย่าง
+
+```go
+package main
+
+import "fmt"
+
+func fibonacci(c, quit chan int) {
+	x, y := 0, 1
+	for {
+		select {
+		case c <- x:
+			x, y = y, x+y
+		case <-quit:
+			fmt.Println("quit")
+			return
+		}
+	}
+}
+
+func main() {
+	c := make(chan int)
+	quit := make(chan int)
+	go func() {
+		for i := 0; i < 10; i++ {
+			fmt.Println(<-c)
+		}
+		quit <- 0
+	}()
+	fibonacci(c, quit)
+}
+
+```
+- สร้าง Channel เพื่อเก็บค่าในการแสดงผลจาก function fibonacci และ Channel quit เพื่อเช็คว่าจบการทำงานหรือยัง
+
+- รัน goroutine ขึ้นมา วนลูบและแสดงค่าจาก channel c ทุกครั้งที่จบการวนลูบหนึ่งรอบ
+
+- เมื่อมีการสั่งแสดงผลจาก `Channel c` 1 ครั้ง ก็จะไปเข้าเงื่อนไขด้านบนใน `function fibonacci` คือ `case c <- x` ค่า x จะถูกส่งเข้าไปใน Channel c และแสดงผลออกมาใน stdout ทำแบบนี้วนไปเรื่อยๆ
+
+- เมื่อ loop รันจนครบจำนวนครั้งส่งค่า 0 เข้าไปใน `Channel quit` เพื่อบ่งบอกว่าจบการทำงานของระบบ ก็จะไปเข้าเงื่อนไขด้านบน `<-quit` หมายความว่า ถ้ามีการรับค่าผ่าน `Channel quit` ให้เข้าเงื่อนไขนี้และ แสดงผล quit และจบการทำงาน
